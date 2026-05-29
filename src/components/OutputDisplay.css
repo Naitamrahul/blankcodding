@@ -1,0 +1,125 @@
+.output-display {
+  background: #1e1e1e;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  margin: 20px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.output-header {
+  background: #2d2d2d;
+  padding: 15px 20px;
+  border-bottom: 1px solid #444;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.output-header h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.execution-time {
+  color: #888;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.output-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  font-family: 'Courier New', monospace;
+}
+
+.loading-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #888;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #444;
+  border-top: 3px solid #00d2ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-output {
+  color: #ff6b6b;
+}
+
+.error-output h4 {
+  margin: 0 0 10px 0;
+  color: #ff6b6b;
+  font-size: 16px;
+}
+
+.error-output pre {
+  background: rgba(255, 107, 107, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #ff6b6b;
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.success-output {
+  color: #4ecdc4;
+}
+
+.success-output pre {
+  background: rgba(78, 205, 196, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #4ecdc4;
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.empty-output {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #666;
+  font-style: italic;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}

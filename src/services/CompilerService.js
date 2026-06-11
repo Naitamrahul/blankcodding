@@ -5,7 +5,7 @@ const CompilerService = {
     const startTime = Date.now();
 
     try {
-      const response = await this.executeWithPiston(code, language);
+      const response = await this.executeWithJDoodle(code, language);
       const executionTime = Date.now() - startTime;
 
       return {
@@ -15,17 +15,18 @@ const CompilerService = {
         exitCode: response.exitCode
       };
     } catch (error) {
-      console.log('Piston API failed, using mock execution:', error.message);
+      console.log('JDoodle API failed, using mock execution:', error.message);
       return this.mockExecution(code, language, Date.now() - startTime);
     }
   },
 
-  async executeWithPiston(code, language) {
-    const apiUrl = 'https://emkc.org/api/v2/piston/execute';
+  async executeWithJDoodle(code, language) {
+    // Use local proxy which forwards to JDoodle API
+    const apiUrl = '/api/jdoodle/execute';
 
     const languageMap = {
-      'javascript': 'javascript',
-      'python': 'python',
+      'javascript': 'nodejs',
+      'python': 'python3',
       'java': 'java',
       'cpp': 'cpp',
       'c': 'c',
@@ -33,55 +34,42 @@ const CompilerService = {
       'ruby': 'ruby',
       'php': 'php',
       'go': 'go',
-      'rust': 'rust'
-    };
-
-    const versionMap = {
-      'javascript': '18.15.0',
-      'python': '3.10.0',
-      'java': '15.0.2',
-      'cpp': '10.2.0',
-      'c': '10.2.0',
-      'csharp': '6.0.0',
-      'ruby': '3.1.0',
-      'php': '8.1.5',
-      'go': '1.16.2',
-      'rust': '1.50.0'
+      'rust': 'rust',
+      'kotlin': 'kotlin',
+      'swift': 'swift'
     };
 
     try {
-      console.log(`Compiling ${language} code with Piston API...`);
+      console.log(`Attempting to compile ${language} code with JDoodle API...`);
+      console.log(`Request URL: ${apiUrl}`);
 
       const response = await axios.post(apiUrl, {
-        language: languageMap[language] || 'javascript',
-        version: versionMap[language] || '*',
-        files: [
-          {
-            name: this.getFileName(language),
-            content: code.trim()
-          }
-        ],
+        language: languageMap[language] || 'nodejs',
+        script: code.trim(),
         stdin: ''
       }, {
         headers: {
           'Content-Type': 'application/json'
-          // No API key needed!
         },
         timeout: 15000
       });
 
-      console.log('Piston API response:', response.data);
-
-      const run = response.data.run || {};
+      console.log('JDoodle API response:', response.data);
 
       return {
-        output: run.stdout || '',
-        error: run.stderr || run.output || '',
-        exitCode: run.code ?? 0
+        output: response.data.output || '',
+        error: response.data.error || '',
+        exitCode: response.data.exitCode ?? 0
       };
 
     } catch (error) {
-      console.log('Piston API failed:', error.message);
+      console.error('JDoodle API Error Details:', {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        url: error.config?.url
+      });
       throw error;
     }
   },

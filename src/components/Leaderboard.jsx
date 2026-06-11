@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './Leaderboard.css';
 
 const Leaderboard = ({ currentUser }) => {
@@ -6,11 +6,7 @@ const Leaderboard = ({ currentUser }) => {
   const [timeFilter, setTimeFilter] = useState('all'); // 'all', 'week', 'month'
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadLeaderboardData();
-  }, [timeFilter]);
-
-  const loadLeaderboardData = () => {
+  const loadLeaderboardData = useCallback(() => {
     setLoading(true);
     
     // Get all users
@@ -64,7 +60,11 @@ const Leaderboard = ({ currentUser }) => {
     
     setLeaderboardData(userScores);
     setLoading(false);
-  };
+  }, [timeFilter, currentUser.id]);
+
+  useEffect(() => {
+    loadLeaderboardData();
+  }, [loadLeaderboardData]);
 
   const getRankIcon = (rank) => {
     if (rank === 1) return '??';

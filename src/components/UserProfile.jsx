@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './UserProfile.css';
 
 const UserProfile = ({ currentUser, onLogout }) => {
@@ -11,11 +11,7 @@ const UserProfile = ({ currentUser, onLogout }) => {
   });
   const [competitionHistory, setCompetitionHistory] = useState([]);
 
-  useEffect(() => {
-    loadUserData();
-  }, []);
-
-  const loadUserData = () => {
+  const loadUserData = useCallback(() => {
     const history = JSON.parse(localStorage.getItem(`history_${currentUser.id}`) || '[]');
     setCompetitionHistory(history);
     
@@ -27,7 +23,11 @@ const UserProfile = ({ currentUser, onLogout }) => {
       favoriteLanguage: getFavoriteLanguage(history)
     };
     setUserStats(stats);
-  };
+  }, [currentUser.id]);
+
+  useEffect(() => {
+    loadUserData();
+  }, [loadUserData]);
 
   const getFavoriteLanguage = (history) => {
     const languageCount = {};

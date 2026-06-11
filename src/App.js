@@ -6,7 +6,6 @@ import LanguageSelector from './components/LanguageSelector';
 import CompetitionTimer from './components/CompetitionTimer';
 import Login from './components/Login';
 import AdminDashboard from './components/AdminDashboard';
-import UserProfile from './components/UserProfile';
 import Questions from './components/Questions';
 import Leaderboard from './components/Leaderboard';
 import CompilerService from './services/CompilerService';
@@ -56,12 +55,7 @@ function App() {
 
   const handleLogin = (user) => {
     setCurrentUser(user);
-    
-    // Save competition history for user
-    if (user.role === 'user') {
-      const history = JSON.parse(localStorage.getItem(`history_${user.id}`) || '[]');
-      // You can update this when competitions are completed
-    }
+    localStorage.setItem('currentUser', JSON.stringify(user));
   };
 
   const handleLogout = () => {
